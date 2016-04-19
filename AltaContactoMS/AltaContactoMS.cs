@@ -14,6 +14,7 @@ namespace AltaContactoMS
 
     using Domain;
 
+    using Microsoft.ServiceFabric.Data;
     using Microsoft.ServiceFabric.Services.Remoting;
     using Microsoft.ServiceFabric.Services.Runtime;
 
@@ -26,6 +27,10 @@ namespace AltaContactoMS
     {
         public AltaContactoMS(StatefulServiceContext context)
             : base(context)
+        { }
+
+        public AltaContactoMS(StatefulServiceContext context, IReliableStateManagerReplica rstm)
+            : base(context, rstm)
         { }
 
         /// <summary>
