@@ -17,5 +17,8 @@ namespace ServiceProxies
     
     public interface IAltaContacto : IService
     {
+        Task<bool> DarDeAlta(Contacto contacto);
+
+        Task<bool> Pagar(string DNI, DatosPago pago);
     }
 }

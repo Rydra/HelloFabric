@@ -48,9 +48,10 @@ namespace AltaContactoMS
         public async Task<bool> DarDeAlta(Contacto contacto)
         {
             if (!contacto.IsValid) return false;
+            var contactoDict = await this.StateManager.GetOrAddAsync<IReliableDictionary<string, Contacto>>("contactoDict");
+
             using (var transaction = this.StateManager.CreateTransaction())
             {
-                var contactoDict = await this.StateManager.GetOrAddAsync<IReliableDictionary<string, Contacto>>(transaction, "contactoDict");
                 // Let's try some hacking between sessions!!!! :D
                 if (!await contactoDict.ContainsKeyAsync(transaction, "contacto" + contacto.DNI))
                     await contactoDict.AddOrUpdateAsync(transaction, "contacto" + contacto.DNI, contacto, (k, c) => contacto);
@@ -63,9 +64,10 @@ namespace AltaContactoMS
         public async Task<bool> Pagar(string DNI, DatosPago pago)
         {
             if (!pago.IsValid) return false;
+            var contactoDict = await this.StateManager.GetOrAddAsync<IReliableDictionary<string, Contacto>>("contactoDict");
+
             using (var transaction = this.StateManager.CreateTransaction())
             {
-                var contactoDict = await this.StateManager.GetOrAddAsync<IReliableDictionary<string, Contacto>>(transaction, "contactoDict");
                 var contacto = await contactoDict.TryGetValueAsync(transaction, "contacto" + DNI);
                 if (!contacto.HasValue) return false;
 

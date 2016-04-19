@@ -4,16 +4,11 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace AltaContacto.Tests
 {
     using System.Fabric.Fakes;
-
     using AltaContactoMS;
-
     using Domain;
-
     using Microsoft.QualityTools.Testing.Fakes;
     using Microsoft.ServiceFabric.Data;
-
     using NSubstitute;
-
     using Ploeh.AutoFixture;
 
     [TestClass]
