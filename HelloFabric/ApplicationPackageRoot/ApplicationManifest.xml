@@ -1,29 +1,39 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<ApplicationManifest ApplicationTypeName="HelloFabricType"
-                     ApplicationTypeVersion="1.0.0"
-                     xmlns="http://schemas.microsoft.com/2011/01/fabric"
-                     xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-                     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <Parameters>
-    <Parameter Name="WebApi_InstanceCount" DefaultValue="-1" />
-  </Parameters>
-  <!-- Importe el elemento ServiceManifest del ServicePackage. Los elementos ServiceManifestName y ServiceManifestVersion 
-       deben coincidir con los atributos Name y Version del elemento ServiceManifest definido en el 
-       archivo ServiceManifest.xml. -->
-  <ServiceManifestImport>
-    <ServiceManifestRef ServiceManifestName="WebApiPkg" ServiceManifestVersion="1.0.0" />
-    <ConfigOverrides />
-  </ServiceManifestImport>
-  <DefaultServices>
-    <!-- La sección siguiente crea instancias de tipos de servicio cuando se crea una 
-         instancia de este tipo de aplicación. También puede crear una o varias instancias de tipo de servicio 
-         usando el módulo ServiceFabric de PowerShell.
-         
-         El atributo ServiceTypeName siguiente debe coincidir con el nombre definido en el archivo ServiceManifest.xml importado. -->
-    <Service Name="WebApi">
-      <StatelessService ServiceTypeName="WebApiType" InstanceCount="[WebApi_InstanceCount]">
-        <SingletonPartition />
-      </StatelessService>
-    </Service>
-  </DefaultServices>
+<ApplicationManifest xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ApplicationTypeName="HelloFabricType" ApplicationTypeVersion="1.0.0" xmlns="http://schemas.microsoft.com/2011/01/fabric">
+   <Parameters>
+      <Parameter Name="AltaContactoMS_MinReplicaSetSize" DefaultValue="2" />
+      <Parameter Name="AltaContactoMS_PartitionCount" DefaultValue="1" />
+      <Parameter Name="AltaContactoMS_TargetReplicaSetSize" DefaultValue="3" />
+      <Parameter Name="ContactsMS_InstanceCount" DefaultValue="-1" />
+      <Parameter Name="WebApi_InstanceCount" DefaultValue="-1" />
+   </Parameters>
+   <ServiceManifestImport>
+      <ServiceManifestRef ServiceManifestName="AltaContactoMSPkg" ServiceManifestVersion="1.0.0" />
+      <ConfigOverrides />
+   </ServiceManifestImport>
+   <ServiceManifestImport>
+      <ServiceManifestRef ServiceManifestName="ContactsMSPkg" ServiceManifestVersion="1.0.0" />
+      <ConfigOverrides />
+   </ServiceManifestImport>
+   <ServiceManifestImport>
+      <ServiceManifestRef ServiceManifestName="WebApiPkg" ServiceManifestVersion="1.0.0" />
+      <ConfigOverrides />
+   </ServiceManifestImport>
+   <DefaultServices>
+      <Service Name="AltaContactoMS">
+         <StatefulService ServiceTypeName="AltaContactoMSType" TargetReplicaSetSize="[AltaContactoMS_TargetReplicaSetSize]" MinReplicaSetSize="[AltaContactoMS_MinReplicaSetSize]">
+            <UniformInt64Partition PartitionCount="[AltaContactoMS_PartitionCount]" LowKey="-9223372036854775808" HighKey="9223372036854775807" />
+         </StatefulService>
+      </Service>
+      <Service Name="ContactsMS">
+         <StatelessService ServiceTypeName="ContactsMSType" InstanceCount="[ContactsMS_InstanceCount]">
+            <SingletonPartition />
+         </StatelessService>
+      </Service>
+      <Service Name="WebApi">
+         <StatelessService ServiceTypeName="WebApiType" InstanceCount="[WebApi_InstanceCount]">
+            <SingletonPartition />
+         </StatelessService>
+      </Service>
+   </DefaultServices>
 </ApplicationManifest>

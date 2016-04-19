@@ -12,11 +12,7 @@ namespace WebApi
             // Configurar Web API para autohospedaje. 
             HttpConfiguration config = new HttpConfiguration();
 
-            config.Routes.MapHttpRoute(
-                name: "DefaultApi",
-                routeTemplate: "api/{controller}/{id}",
-                defaults: new { id = RouteParameter.Optional }
-            );
+            config.MapHttpAttributeRoutes();
 
             appBuilder.UseWebApi(config);
         }
